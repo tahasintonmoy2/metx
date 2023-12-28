@@ -99,7 +99,7 @@ export const MembersModal = () => {
         <div
           className={cn(
             "my-6 mx-5 space-y-4 overflow-x-hidden overflow-y-auto w-full",
-            server?.members?.length > 2 ? "h-32" : "h-auto"
+            server?.members?.length > 2 ? "h-36" : "h-auto"
           )}
         >
           {server?.members?.map((member) => (
