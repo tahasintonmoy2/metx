@@ -1,9 +1,16 @@
 "use client";
 
-import { Member, MemberRole, Profile } from "@prisma/client";
-import React, { useEffect, useState } from "react";
-import { UserAvatar } from "@/components/user-avatar";
 import { ActionHint } from "@/components/action-hint";
+import { useSocket } from "@/components/providers/socket-provider";
+import { Button } from "@/components/ui/button";
+import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { UserAvatar } from "@/components/user-avatar";
+import { useModal } from "@/hooks/use-modal";
+import { cn } from "@/lib/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Member, MemberRole, Profile } from "@prisma/client";
+import axios from "axios";
 import {
   CornerUpLeft,
   Crown,
@@ -13,20 +20,12 @@ import {
   Trash,
 } from "lucide-react";
 import Image from "next/image";
-import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
-import { useRouter, useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import qs from "query-string";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import * as z from "zod";
-import { cn } from "@/lib/utils";
 import { toast } from "sonner";
-import { useModal } from "@/hooks/use-modal";
-import { OnlineStatus } from "@/components/online-status";
-import { useSocket } from "@/components/providers/socket-provider";
+import * as z from "zod";
 
 interface ChatItemProps {
   id: string;
@@ -159,7 +158,6 @@ export const ChatItem = ({
                 <ActionHint description={member.role} side="top">
                   {roleIconMap[member.role]}
                 </ActionHint>
-                <OnlineStatus />
               </div>
             </div>
             <span className="text-xs text-zinc-500 mt-1 dark:text-zinc-400">
