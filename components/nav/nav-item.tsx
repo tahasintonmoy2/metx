@@ -11,7 +11,11 @@ interface NavItemProps {
   name: string;
 }
 
-export const NavItem = ({ id, imageUrl, name }: NavItemProps) => {
+export const NavItem = ({ 
+  id, 
+  imageUrl, 
+  name 
+}: NavItemProps) => {
   const params = useParams();
   const router = useRouter();
 

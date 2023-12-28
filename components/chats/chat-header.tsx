@@ -11,6 +11,7 @@ interface ChatHeaderProps {
   type: "channel" | "conversation";
   imageUrl?: string;
   connect: React.ReactNode;
+  online: React.ReactNode;
 }
 
 export const ChatHeader = ({
@@ -19,6 +20,7 @@ export const ChatHeader = ({
   type,
   imageUrl,
   connect,
+  online
 }: ChatHeaderProps) => {
   return (
     <div className="px-3 flex items-center h-14 border-neutral-200 dark:border-[#181b2b] border-b-2">
@@ -33,7 +35,10 @@ export const ChatHeader = ({
         <p className="font-semibold text-md text-black dark:text-white">
           {name}
         </p>
+        <div className="flex items-center">
         <p className=" text-[0.8rem] font-extralight">{connect}</p>
+        <p className=" text-[0.8rem] font-extralight">{online}</p>
+        </div>
       </div>
         <div className="ml-auto flex items-center">
           {type === "conversation" && (

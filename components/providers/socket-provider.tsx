@@ -11,11 +11,13 @@ import { io as ClientIO } from "socket.io-client";
 type SocektContextType = {
   socket: any | null;
   isConnected: boolean;
+  isOnline: boolean;
 };
 
 const SoceketContext = createContext<SocektContextType>({
   socket: null,
   isConnected: false,
+  isOnline: false
 });
 
 export const useSocket = () => {
@@ -30,6 +32,7 @@ export const SocketProvider = ({
   const [isMounted, setIsMounted] = useState(false)
   const [socket, setSocket] = useState(null);
   const [isConnected, setIsConnected] = useState(false);
+  const [isOnline, setIsOnline] = useState(false);
 
   useEffect(() => {
     const socketInstance = new (ClientIO as any)(
@@ -42,10 +45,12 @@ export const SocketProvider = ({
 
     socketInstance.on("connect", () => {
       setIsConnected(true);
+      setIsOnline(true);
     });
 
     socketInstance.on("disconnect", () => {
       setIsConnected(false);
+      setIsOnline(false);
     });
 
     setSocket(socketInstance);
@@ -64,7 +69,7 @@ export const SocketProvider = ({
   }
 
   return (
-    <SoceketContext.Provider value={{ socket, isConnected }}>
+    <SoceketContext.Provider value={{ socket, isConnected, isOnline }}>
       {children}
     </SoceketContext.Provider>
   );

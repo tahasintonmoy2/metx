@@ -2,6 +2,7 @@ import { ChatHeader } from '@/components/chats/chat-header';
 import { ChatInput } from '@/components/chats/chat-input';
 import { ChatMessages } from '@/components/chats/chat-messages';
 import { MediaRoom } from '@/components/media-room';
+import { OnlineStatus } from '@/components/online-status';
 import { SocketIndicator } from '@/components/socket-indicator';
 import { getOrCreateConversation } from '@/lib/conversation';
 import { currentProfile } from '@/lib/current-profile';
@@ -62,6 +63,7 @@ const MemberId = async({
        serverId={params.serverId}
        type="conversation"
        connect={<SocketIndicator />}
+       online={<OnlineStatus />}
       />
       {searchParams.video && (
         <MediaRoom 

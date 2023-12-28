@@ -25,6 +25,8 @@ import * as z from "zod";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { useModal } from "@/hooks/use-modal";
+import { OnlineStatus } from "@/components/online-status";
+import { useSocket } from "@/components/providers/socket-provider";
 
 interface ChatItemProps {
   id: string;
@@ -64,9 +66,10 @@ export const ChatItem = ({
   socketQuery,
 }: ChatItemProps) => {
   const [isEditing, setIsEditing] = useState(false);
-  const {onOpen} = useModal();
+  const { onOpen } = useModal();
   const params = useParams()
   const router = useRouter();
+  const {isConnected} = useSocket()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -79,17 +82,17 @@ export const ChatItem = ({
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-        const url = qs.stringifyUrl({
-          url: `${socketUrl}/${id}`,
-          query: socketQuery,
-        });
-  
-        await axios.patch(url, values);
-        router.refresh();
-        setIsEditing(false);
-      } catch (error) {
-        toast.error(`${error}`);
-      }
+      const url = qs.stringifyUrl({
+        url: `${socketUrl}/${id}`,
+        query: socketQuery,
+      });
+
+      await axios.patch(url, values);
+      router.refresh();
+      setIsEditing(false);
+    } catch (error) {
+      toast.error(`${error}`);
+    }
   };
 
   useEffect(() => {
@@ -100,11 +103,11 @@ export const ChatItem = ({
 
   useEffect(() => {
     const handleKeyDown = (e: any) => {
-        if (e.key === "Escape" || e.keyCode === 27) {
-            setIsEditing(false);
-        }
+      if (e.key === "Escape" || e.keyCode === 27) {
+        setIsEditing(false);
+      }
     }
-  
+
     window.addEventListener("keydown", handleKeyDown)
     return () => {
       window.removeEventListener("keydown", handleKeyDown)
@@ -113,7 +116,7 @@ export const ChatItem = ({
 
   const onMemberClick = () => {
     if (member.id === currentMember.id) {
-        return;
+      return;
     }
 
     router.push(`/servers/${params?.serverId}/conversations/${member.id}`)
@@ -134,6 +137,17 @@ export const ChatItem = ({
       <div className="group flex gap-x-2 items-start w-full">
         <div onClick={onMemberClick} className="cursor-pointer hover:drop-shadow-md transition">
           <UserAvatar src={member.profile.imageUrl} />
+          {isConnected ? (
+            <span className="relative flex h-2 w-2 ml-auto">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"/>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"/>
+            </span>
+          ): (
+            <span className="relative flex h-2 w-2 ml-auto">
+              <span className="absolute inline-flex h-full w-full rounded-full bg-slate-400 opacity-75"/>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-slate-400"/>
+            </span>            
+          )}
         </div>
         <div className="flex flex-col w-full">
           <div className="flex items-center gap-x-2">
@@ -141,13 +155,14 @@ export const ChatItem = ({
               <p onClick={onMemberClick} className="font-semibold hover:underline cursor-pointer">
                 {member.profile.name}
               </p>
-              <div className="ml-1 mt-1">
+              <div className="ml-1 mt-1 flex items-center">
                 <ActionHint description={member.role} side="top">
                   {roleIconMap[member.role]}
                 </ActionHint>
+                <OnlineStatus />
               </div>
             </div>
-            <span className="text-xs text-zinc-500 dark:text-zinc-400">
+            <span className="text-xs text-zinc-500 mt-1 dark:text-zinc-400">
               {timestamp}
             </span>
           </div>
@@ -179,7 +194,7 @@ export const ChatItem = ({
               className={cn(
                 "text-sm text-zinc-600 dark:text-zinc-300",
                 deleted &&
-                  "italic text-zinc-500 dark:text-zinc-400 text-xs mt-1"
+                "italic text-zinc-500 dark:text-zinc-400 text-xs mt-1"
               )}
             >
               {content}
@@ -206,8 +221,8 @@ export const ChatItem = ({
                         <div className="relative w-full">
                           <Input
                             className={cn(
-                                "py-4 dark:bg-[#1f2236] bg-gray-300 border-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-zinc-800 dark:text-zinc-200",
-                                isLoading && "shadow-none dark:text-gray-500 cursor-not-allowed"
+                              "py-4 dark:bg-[#1f2236] bg-gray-300 border-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-zinc-800 dark:text-zinc-200",
+                              isLoading && "shadow-none dark:text-gray-500 cursor-not-allowed"
                             )}
                             placeholder="Edit Message"
                             disabled
@@ -219,7 +234,7 @@ export const ChatItem = ({
                   )}
                 />
                 <Button size="sm" variant="primary" disabled={isLoading}>
-                  Save & Change  
+                  Save & Change
                 </Button>
               </form>
               <span className="text-sm mt-1 text-zinc-400">
@@ -241,8 +256,8 @@ export const ChatItem = ({
           )}
           <ActionHint description="Delete">
             <Trash onClick={() => onOpen("deleteMessage", {
-                apiUrl: `${socketUrl}/${id}`,
-                query: socketQuery,
+              apiUrl: `${socketUrl}/${id}`,
+              query: socketQuery,
             })} className="cursor-pointer ml-auto h-4 w-4 text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition" />
           </ActionHint>
           <ActionHint description="Reply">

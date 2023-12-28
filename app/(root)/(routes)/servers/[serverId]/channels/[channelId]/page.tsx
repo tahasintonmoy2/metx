@@ -8,6 +8,7 @@ import { ChatInput } from "@/components/chats/chat-input";
 import { ChatMessages } from "@/components/chats/chat-messages";
 import { ChannelType } from "@prisma/client";
 import { MediaRoom } from "@/components/media-room";
+import { OnlineStatus } from "@/components/online-status";
 
 interface ChannelIdProps {
   params: {
@@ -47,6 +48,7 @@ const ChannelId = async ({ params }: ChannelIdProps) => {
         serverId={channel.serverId}
         type="channel"
         connect={<SocketIndicator />}
+        online={<OnlineStatus />}
       />
       {channel.type === ChannelType.TEXT && (
         <>
