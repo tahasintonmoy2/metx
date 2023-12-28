@@ -9,7 +9,7 @@ export const SocketIndicator = () => {
   if (!isConnected) {
     return (
       <Badge variant="outline" className="bg-[#ff0000] cursor-default text-white border-none">
-        Fallback: Polling every 1s
+        Fallback: Disconnected from our server
       </Badge>
     );
   }
