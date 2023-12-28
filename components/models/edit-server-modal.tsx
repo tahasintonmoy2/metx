@@ -34,7 +34,7 @@ const formSchema = z.object({
 
 export const EditServerModal = () => {
   const router = useRouter();
-  const {isOpen, onClose, data , type} = useModal();
+  const { isOpen, onClose, data, type } = useModal();
   const { server } = data;
 
   const isModalOpen = isOpen && type === "editServer";
@@ -49,11 +49,10 @@ export const EditServerModal = () => {
 
   useEffect(() => {
     if (server) {
-      form.setValue("name", server.name)
-      form.setValue("imageUrl", server.imageUrl)
+      form.setValue("name", server.name);
+      form.setValue("imageUrl", server.imageUrl);
     }
-  }, [server, form])
-  
+  }, [server, form]);
 
   const isLoading = form.formState.isSubmitting;
 
@@ -63,7 +62,7 @@ export const EditServerModal = () => {
 
       form.reset();
       router.refresh();
-      toast.success("Server edited")
+      toast.success("Server edited");
       onClose();
     } catch (error) {
       toast.error(`${error}`);
@@ -72,7 +71,7 @@ export const EditServerModal = () => {
 
   const handleClose = () => {
     onClose();
-  }
+  };
 
   return (
     <Modal

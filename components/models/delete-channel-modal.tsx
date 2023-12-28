@@ -55,7 +55,9 @@ export const DeleteChannelModal = () => {
           </DialogTitle>
           <DialogDescription className="text-center md:text-sm text-[12px] text-gray-700 px-6">
             This action cannot be undone. This will permanently delete your{" "}
-            <span className="text-blue-600 font-semibold">#{channel?.name}</span>{" "}
+            <span className="text-blue-600 font-semibold">
+              #{channel?.name}
+            </span>{" "}
             server and remove your all data from our servers.
           </DialogDescription>
         </DialogHeader>

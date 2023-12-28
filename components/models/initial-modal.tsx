@@ -67,7 +67,7 @@ export const InitialModal = () => {
       router.refresh();
       window.location.reload();
     } catch (error) {
-        toast.error(`${error}`)
+      toast.error(`${error}`);
     }
   };
 
@@ -124,7 +124,9 @@ export const InitialModal = () => {
                     />
                   </FormControl>
                   <FormDescription>
-                    <p className="text-gray-500">Server name much be 4 character or higher</p>
+                    <p className="text-gray-500">
+                      Server name much be 4 character or higher
+                    </p>
                   </FormDescription>
                   <FormMessage className="text-red-600" />
                 </FormItem>

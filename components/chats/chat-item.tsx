@@ -66,9 +66,9 @@ export const ChatItem = ({
 }: ChatItemProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const { onOpen } = useModal();
-  const params = useParams()
+  const params = useParams();
   const router = useRouter();
-  const {isConnected} = useSocket()
+  const { isConnected } = useSocket();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -105,21 +105,21 @@ export const ChatItem = ({
       if (e.key === "Escape" || e.keyCode === 27) {
         setIsEditing(false);
       }
-    }
+    };
 
-    window.addEventListener("keydown", handleKeyDown)
+    window.addEventListener("keydown", handleKeyDown);
     return () => {
-      window.removeEventListener("keydown", handleKeyDown)
-    }
-  }, [])
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
 
   const onMemberClick = () => {
     if (member.id === currentMember.id) {
       return;
     }
 
-    router.push(`/servers/${params?.serverId}/conversations/${member.id}`)
-  }
+    router.push(`/servers/${params?.serverId}/conversations/${member.id}`);
+  };
 
   const fileType = fileUrl?.split(".").pop();
 
@@ -134,24 +134,30 @@ export const ChatItem = ({
   return (
     <div className="relative group flex items-center rounded-md hover:bg-gray-200 dark:hover:bg-black/25 p-4 transition w-full">
       <div className="group flex gap-x-2 items-start w-full">
-        <div onClick={onMemberClick} className="cursor-pointer hover:drop-shadow-md transition">
+        <div
+          onClick={onMemberClick}
+          className="cursor-pointer hover:drop-shadow-md transition"
+        >
           <UserAvatar src={member.profile.imageUrl} />
           {isConnected ? (
             <span className="relative flex h-2 w-2 ml-auto">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"/>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"/>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
             </span>
-          ): (
+          ) : (
             <span className="relative flex h-2 w-2 ml-auto">
-              <span className="absolute inline-flex h-full w-full rounded-full bg-slate-400 opacity-75"/>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-slate-400"/>
-            </span>            
+              <span className="absolute inline-flex h-full w-full rounded-full bg-slate-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-slate-400" />
+            </span>
           )}
         </div>
         <div className="flex flex-col w-full">
           <div className="flex items-center gap-x-2">
             <div className="flex items-center">
-              <p onClick={onMemberClick} className="font-semibold hover:underline cursor-pointer">
+              <p
+                onClick={onMemberClick}
+                className="font-semibold hover:underline cursor-pointer"
+              >
                 {member.profile.name}
               </p>
               <div className="ml-1 mt-1 flex items-center">
@@ -192,7 +198,7 @@ export const ChatItem = ({
               className={cn(
                 "text-sm text-zinc-600 dark:text-zinc-300",
                 deleted &&
-                "italic text-zinc-500 dark:text-zinc-400 text-xs mt-1"
+                  "italic text-zinc-500 dark:text-zinc-400 text-xs mt-1"
               )}
             >
               {content}
@@ -220,7 +226,8 @@ export const ChatItem = ({
                           <Input
                             className={cn(
                               "py-4 dark:bg-[#1f2236] bg-gray-300 border-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-zinc-800 dark:text-zinc-200",
-                              isLoading && "shadow-none dark:text-gray-500 cursor-not-allowed"
+                              isLoading &&
+                                "shadow-none dark:text-gray-500 cursor-not-allowed"
                             )}
                             placeholder="Edit Message"
                             disabled
@@ -253,10 +260,15 @@ export const ChatItem = ({
             </ActionHint>
           )}
           <ActionHint description="Delete">
-            <Trash onClick={() => onOpen("deleteMessage", {
-              apiUrl: `${socketUrl}/${id}`,
-              query: socketQuery,
-            })} className="cursor-pointer ml-auto h-4 w-4 text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition" />
+            <Trash
+              onClick={() =>
+                onOpen("deleteMessage", {
+                  apiUrl: `${socketUrl}/${id}`,
+                  query: socketQuery,
+                })
+              }
+              className="cursor-pointer ml-auto h-4 w-4 text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition"
+            />
           </ActionHint>
           <ActionHint description="Reply">
             <CornerUpLeft className="cursor-pointer hidden ml-auto h-4 w-4 text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition" />

@@ -33,7 +33,7 @@ const formSchema = z.object({
 
 export const CreateServerModal = () => {
   const router = useRouter();
-  const {isOpen, onClose, type} = useModal();
+  const { isOpen, onClose, type } = useModal();
 
   const isModalOpen = isOpen && type === "createServer";
 
@@ -53,7 +53,7 @@ export const CreateServerModal = () => {
 
       form.reset();
       router.refresh();
-      toast.success("Server created")
+      toast.success("Server created");
       onClose();
     } catch (error) {
       toast.error(`${error}`);
@@ -63,7 +63,7 @@ export const CreateServerModal = () => {
   const handleClose = () => {
     form.reset();
     onClose();
-  }
+  };
 
   return (
     <Modal

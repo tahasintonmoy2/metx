@@ -14,7 +14,7 @@ import {
   MoreVertical,
   ShieldCheck,
   ShieldQuestion,
-  UserMinus2
+  UserMinus2,
 } from "lucide-react";
 import qs from "query-string";
 import { useState } from "react";
@@ -29,14 +29,10 @@ import {
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
-  DropdownMenuTrigger
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-
-interface MembersModalProps {
-  role?: MemberRole;
-}
 
 const roleIconMap = {
   GUEST: null,
@@ -45,31 +41,31 @@ const roleIconMap = {
 };
 
 export const MembersModal = () => {
-  const router = useRouter()
+  const router = useRouter();
   const { isOpen, onOpen, onClose, type, data } = useModal();
   const [loadingId, setLoadingId] = useState("");
   const { server } = data as { server: ServerWithMembersWithProfiles };
   const isModalOpen = isOpen && type === "members";
 
-  const onKick =async (memberId:string) => {
+  const onKick = async (memberId: string) => {
     try {
       setLoadingId(memberId);
       const url = qs.stringifyUrl({
         url: `/api/members/${memberId}`,
         query: {
           serverId: server?.id,
-        }
+        },
       });
 
       const response = await axios.delete(url);
       router.refresh();
       onOpen("members", { server: response.data });
     } catch (error) {
-      toast.error(`Failed to kick, error ${error}`)
+      toast.error(`Failed to kick, error ${error}`);
     } finally {
-      setLoadingId("")
+      setLoadingId("");
     }
-  }
+  };
 
   const onRoleChange = async (memberId: string, role: MemberRole) => {
     try {
@@ -78,19 +74,19 @@ export const MembersModal = () => {
         url: `/api/members/${memberId}`,
         query: {
           serverId: server?.id,
-        }
+        },
       });
 
       const response = await axios.patch(url, { role });
 
       router.refresh();
-      onOpen("members", { server: response.data })
+      onOpen("members", { server: response.data });
     } catch (error) {
-      toast.error(`Failed to change role error ${error}`)
+      toast.error(`Failed to change role error ${error}`);
     } finally {
-      setLoadingId("")
+      setLoadingId("");
     }
-  }
+  };
 
   return (
     <Modal
@@ -102,7 +98,7 @@ export const MembersModal = () => {
       <div>
         <div
           className={cn(
-            "my-6 mx-5 space-y-4 overflow-x-hidden overflow-y-auto w-[450px]",
+            "my-6 mx-5 space-y-4 overflow-x-hidden overflow-y-auto w-full",
             server?.members?.length > 2 ? "h-32" : "h-auto"
           )}
         >
@@ -118,12 +114,12 @@ export const MembersModal = () => {
               </div>
               {server.profileId !== member.profileId &&
                 loadingId !== member.id && (
-                  <div className="ml-auto">
+                  <div className="ml-auto mr-6">
                     <DropdownMenu>
                       <DropdownMenuTrigger className="focus:border-none focus-visible:outline-none">
                         <MoreVertical className="h-5 w-5" />
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent side="left">
+                      <DropdownMenuContent side="bottom">
                         <DropdownMenuSub>
                           <DropdownMenuSubTrigger>
                             <ShieldQuestion className="h-5 w-5 mr-2" />
@@ -131,14 +127,20 @@ export const MembersModal = () => {
                           </DropdownMenuSubTrigger>
                           <DropdownMenuPortal>
                             <DropdownMenuSubContent className="w-36">
-                              <DropdownMenuItem onClick={() => onRoleChange(member.id, "GUEST")}>
+                              <DropdownMenuItem
+                                onClick={() => onRoleChange(member.id, "GUEST")}
+                              >
                                 <Hexagon className="h-5 w-5 mr-2" />
                                 <span>Guest</span>
                                 {member.role === "GUEST" && (
                                   <Check className="h-4 w-4 ml-auto" />
                                 )}
                               </DropdownMenuItem>
-                              <DropdownMenuItem onClick={() => onRoleChange(member.id, "MODERATOR")}>
+                              <DropdownMenuItem
+                                onClick={() =>
+                                  onRoleChange(member.id, "MODERATOR")
+                                }
+                              >
                                 <ShieldCheck className="h-5 w-5 mr-2" />
                                 <span>Modertor</span>
                                 {member.role === "MODERATOR" && (
