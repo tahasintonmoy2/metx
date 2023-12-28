@@ -1,11 +1,10 @@
 "use client";
 
+import { useUser } from "@clerk/nextjs";
 import { LiveKitRoom, VideoConference } from "@livekit/components-react";
 import "@livekit/components-styles";
-import { useUser } from "@clerk/nextjs";
-import { Channel } from "@prisma/client";
 import { Loader2 } from "lucide-react";
-import React, { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 interface MediaRoomProps {
@@ -61,6 +60,7 @@ export const MediaRoom = ({
     connect={true}
     video={video}
     audio={audio}
+    className="overflow-hidden"
    >
      <VideoConference />  
    </LiveKitRoom>
