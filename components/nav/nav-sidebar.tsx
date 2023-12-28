@@ -43,7 +43,7 @@ export const NavSidebar = async () => {
         <Separator
         className="h-[2px] bg-zinc-300 dark:bg-[#212333] rounded-md w-10 mx-auto"
       />
-        <UserButton />
+        <UserButton afterSignOutUrl='/'/>
       </div>
     </div>
   );
