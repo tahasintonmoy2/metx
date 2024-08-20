@@ -4,16 +4,16 @@ import { initalProfile } from '@/lib/initial-profile'
 import { redirect } from 'next/navigation';
 import React from 'react'
 
-const Setup = async() => {
+const Setup = async () => {
   const profile = await initalProfile();
 
   const server = await db.server.findFirst({
-    where:{
-        members:{
-            some:{
-                profileId: profile.id
-            }
+    where: {
+      members: {
+        some: {
+          profileId: profile.id
         }
+      }
     }
   });
 
